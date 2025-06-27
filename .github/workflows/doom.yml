@@ -1,23 +1,29 @@
 name: Play DOOM in GitHub Actions
-on: [workflow_dispatch]  # Permite execução manual
+on: [workflow_dispatch]
 
 jobs:
   doom:
-    runs-on: ubuntu-latest  # Ubuntu 22.04 ou superior
+    runs-on: ubuntu-latest
     steps:
-      # Passo 1: Instala o Chocolate Doom e dependências
+      # 1. Instala o Chocolate Doom
       - name: Instalar Chocolate Doom
         run: |
           sudo apt-get update
           sudo apt-get install -y chocolate-doom
 
-      # Passo 2: Baixa o arquivo WAD (DOOM 1)
+      # 2. Baixa o arquivo WAD (DOOM 1) de fonte alternativa
       - name: Baixar arquivo WAD (DOOM 1)
         run: |
-          wget https://github.com/msikma/doom-wads/raw/master/doom1.wad -O doom1.wad
+          wget "https://www.doomworld.com/idgames/idstuff/doom/doom19a.zip" -O doom1.zip
+          unzip doom1.zip "doom1.wad" -d .  # Extrai apenas o WAD
+          if [ ! -f "doom1.wad" ]; then
+            echo "❌ Erro: Arquivo WAD não encontrado após extração!"
+            exit 1
+          fi
+          echo "✅ doom1.wad baixado com sucesso!"
 
-      # Passo 3: Executa o DOOM (modo terminal)
+      # 3. Executa o DOOM (modo terminal)
       - name: Rodar DOOM
         run: |
           echo "Use CTRL+C para sair."
-          chocolate-doom -iwad doom1.wad -nosound  # -nosound evita erros de audio no CI
+          chocolate-doom -iwad doom1.wad -nosound
