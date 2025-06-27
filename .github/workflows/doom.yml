@@ -9,20 +9,20 @@ jobs:
       - name: Instalar Chocolate Doom
         run: |
           sudo apt-get update
-          sudo apt-get install -y chocolate-doom
+          sudo apt-get install -y chocolate-doom unzip
 
-      # 2. Baixa o arquivo WAD (DOOM 1) de fonte alternativa
+      # 2. Baixa o arquivo WAD de um mirror alternativo
       - name: Baixar arquivo WAD (DOOM 1)
         run: |
-          wget "https://www.doomworld.com/idgames/idstuff/doom/doom19a.zip" -O doom1.zip
-          unzip doom1.zip "doom1.wad" -d .  # Extrai apenas o WAD
+          wget --user-agent="Mozilla/5.0" "https://youfailit.net/pub/idgames/idstuff/doom/doom19a.zip" -O doom1.zip
+          unzip doom1.zip "doom1.wad" -d .
           if [ ! -f "doom1.wad" ]; then
             echo "❌ Erro: Arquivo WAD não encontrado após extração!"
             exit 1
           fi
           echo "✅ doom1.wad baixado com sucesso!"
 
-      # 3. Executa o DOOM (modo terminal)
+      # 3. Executa o DOOM
       - name: Rodar DOOM
         run: |
           echo "Use CTRL+C para sair."
