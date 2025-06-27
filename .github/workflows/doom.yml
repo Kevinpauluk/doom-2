@@ -1,29 +1,18 @@
-name: Play DOOM in GitHub Actions
+name: Play TinyDoom in GitHub Actions
 on: [workflow_dispatch]
 
 jobs:
   doom:
     runs-on: ubuntu-latest
     steps:
-      # 1. Instala o Chocolate Doom
-      - name: Instalar Chocolate Doom
+      - name: Instalar TinyDoom
         run: |
           sudo apt-get update
-          sudo apt-get install -y chocolate-doom unzip
+          sudo apt-get install -y git build-essential libsdl2-dev
+          git clone https://github.com/ozkl/tinydoom.git
+          cd tinydoom
+          make
 
-      # 2. Baixa o arquivo WAD de um mirror alternativo
-      - name: Baixar arquivo WAD (DOOM 1)
+      - name: Rodar TinyDoom
         run: |
-          wget --user-agent="Mozilla/5.0" "https://youfailit.net/pub/idgames/idstuff/doom/doom19a.zip" -O doom1.zip
-          unzip doom1.zip "doom1.wad" -d .
-          if [ ! -f "doom1.wad" ]; then
-            echo "❌ Erro: Arquivo WAD não encontrado após extração!"
-            exit 1
-          fi
-          echo "✅ doom1.wad baixado com sucesso!"
-
-      # 3. Executa o DOOM
-      - name: Rodar DOOM
-        run: |
-          echo "Use CTRL+C para sair."
-          chocolate-doom -iwad doom1.wad -nosound
+          ./tinydoom/tinydoom
