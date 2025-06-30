@@ -5,14 +5,18 @@ jobs:
   doom:
     runs-on: ubuntu-latest
     steps:
-      - name: Instalar TinyDoom
+      - name: Instalar dependências
         run: |
           sudo apt-get update
           sudo apt-get install -y git build-essential libsdl2-dev
-          git clone https://github.com/ozkl/tinydoom.git
+
+      # Usa HTTPS com token padrão do GitHub
+      - name: Clonar TinyDoom (com autenticação)
+        run: |
+          git clone https://github.com/ozkl/tinydoom.git --depth 1
+
+      - name: Compilar e executar TinyDoom
+        run: |
           cd tinydoom
           make
-
-      - name: Rodar TinyDoom
-        run: |
-          ./tinydoom/tinydoom
+          ./tinydoom
